@@ -21,6 +21,9 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGener
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
+from dotenv import load_dotenv
+
+load_dotenv()
 
 RUTA_PDF = Path(__file__).parent.parent / "data" / "politica_reembolsos_bimbam_buy.pdf"
 
@@ -60,12 +63,12 @@ def construir_agente(ruta_pdf: str | Path = RUTA_PDF):
     fragmentos = splitter.split_documents(documentos)
 
     # 3) Vectorizar e indexar
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001", output_dimensionality=768)
     indice = FAISS.from_documents(fragmentos, embeddings)
     retriever = indice.as_retriever(search_kwargs={"k": 4})
 
     # 4) Modelo de lenguaje
-    llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0.2)
+    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.2)
 
     # 5) Cadena RAG: pregunta -> recuperar contexto -> prompt -> LLM -> texto
     def formatear(docs):
