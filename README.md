@@ -68,7 +68,7 @@ Para el deploy en la nube, sigue la guía completa en [`docs/deploy_oci.md`](doc
 ## Ejemplos de preguntas y respuestas
 
 **P: ¿Cuántos días tengo para devolver un producto si simplemente no me gustó?**
-> Puedes ejercer tu derecho de retracto dentro de los 10 días corridos posteriores a recibir el producto, sin necesidad de justificar tu decisión. El producto debe estar sin uso, en su empaque original y con todos sus accesorios. Ten en cuenta que el envío de retorno corre por tu cuenta, salvo que la compra supere los $100.000 CLP, en cuyo caso BimBam Buy retira el producto sin costo.
+> Puedes ejercer tu derecho de retracto y devolver un producto que no te gustó dentro de los 10 días corridos posteriores a la recepción del mismo. El producto debe estar sin uso, en su empaque original y con todos sus accesorios, manuales y etiquetas.
 
 **P: ¿En cuánto tiempo me devuelven el dinero a la tarjeta de crédito?**
 > Una vez que el producto es recibido y verificado en bodega (máximo 3 días hábiles), el reembolso a tarjeta de crédito tarda entre 5 y 10 días hábiles según tu banco. Si prefieres, puedes recibirlo de inmediato como saldo en BimBam Wallet con un bono adicional del 10%.
@@ -78,6 +78,12 @@ Para el deploy en la nube, sigue la guía completa en [`docs/deploy_oci.md`](doc
 
 **P: ¿Cuál es el horario de atención por WhatsApp?**
 > El WhatsApp de soporte (+56 9 5555 2024) atiende de lunes a sábado, de 9:00 a 21:00 horas.
+
+**P: ¿Aceptan Bitcoin?**
+> La política de Reembolsos y Devoluciones no cubre información sobre los métodos de pago aceptados, como Bitcoin. Te sugiero escribir a soporte@bimbambuy.com para obtener esa información.
+
+*Nota: este caso demuestra que el agente no alucina — reconoce cuándo la información
+está fuera del documento fuente y deriva al canal de soporte.*
 
 ## Estructura del repositorio
 
