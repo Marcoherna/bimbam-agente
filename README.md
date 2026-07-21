@@ -85,6 +85,8 @@ Para el deploy en la nube, sigue la guía completa en [`docs/deploy_oci.md`](doc
 *Nota: este caso demuestra que el agente no alucina — reconoce cuándo la información
 está fuera del documento fuente y deriva al canal de soporte.*
 
+![Agente respondiendo](docs/capturas/ejemplos_agente.png)
+
 ## Estructura del repositorio
 
 ```
