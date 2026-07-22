@@ -2,7 +2,7 @@
 
 Agente de inteligencia artificial que responde en lenguaje natural preguntas sobre la **Política de Reembolsos y Devoluciones de BimBam Buy**, un e-commerce latinoamericano. Los colaboradores y clientes obtienen respuestas directas sin abrir el documento.
 
-**Demo en OCI:** `http://TU_IP_PUBLICA:8501` *(reemplazar tras el deploy — ver captura en `docs/`)*
+**Demo en OCI:** `http://159.112.132.0:8501`
 
 ## El problema
 
@@ -22,14 +22,14 @@ El agente usa **RAG (Retrieval-Augmented Generation)**:
                  │              FASE DE CONSULTA                │
   Pregunta ──────► Búsqueda semántica ──► Top-4 fragmentos ─┐   │
                  │        (FAISS)                            ▼   │
-                 │                    Prompt + contexto ──► Gemini 2.0 Flash ──► Respuesta
+                 │                    Prompt + contexto ──► Gemini 2.5 Flash ──► Respuesta
                  └──────────────────────────────────────────────┘
 ```
 
 1. **Ingesta**: `PyPDFLoader` lee el PDF y `RecursiveCharacterTextSplitter` lo divide en fragmentos de 1000 caracteres con superposición de 150.
-2. **Indexación**: cada fragmento se convierte en un vector con `text-embedding-004` de Google y se guarda en un índice **FAISS** en memoria.
+2. **Indexación**: cada fragmento se convierte en un vector con `gemini-embedding-001` de Google (reducido a 768 dimensiones) y se guarda en un índice FAISS en memoria.
 3. **Recuperación**: ante una pregunta, se buscan los 4 fragmentos semánticamente más cercanos.
-4. **Generación**: **Gemini 2.0 Flash** redacta la respuesta usando solo ese contexto; si la información no está en el documento, lo dice honestamente.
+4. **Generación**: **Gemini 2.5 Flash** redacta la respuesta usando solo ese contexto; si la información no está en el documento, lo dice honestamente.
 5. **Interfaz**: una app de **Streamlit** con formato de chat, desplegada en **OCI Compute**.
 
 ## Tecnologías
@@ -39,7 +39,7 @@ El agente usa **RAG (Retrieval-Augmented Generation)**:
 | Python 3.10+ | Lenguaje principal |
 | LangChain | Orquestación del pipeline RAG |
 | PyPDF | Lectura del documento PDF |
-| Google Gemini (API gratuita) | Embeddings + modelo de lenguaje |
+| Google Gemini (API gratuita) | `gemini-embedding-001` (embeddings) + `gemini-2.5-flash` (generación) |
 | FAISS | Búsqueda vectorial en memoria |
 | Streamlit | Interfaz web de chat |
 | OCI Compute (Always Free) | Deploy en la nube |
@@ -48,13 +48,17 @@ El agente usa **RAG (Retrieval-Augmented Generation)**:
 
 ```bash
 # 1. Clonar e instalar
-git clone https://github.com/TU_USUARIO/bimbam-agente.git
+git clone https://github.com/Marcoherna/bimbam-agente.git
 cd bimbam-agente
 python -m venv .venv && source .venv/bin/activate   # en Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
 # 2. Configurar la API key (gratis en https://aistudio.google.com/apikey)
 export GOOGLE_API_KEY="tu_clave_aqui"               # en Windows: set GOOGLE_API_KEY=tu_clave_aqui
+#    Copia .env.example como .env y coloca tu clave:
+cp .env.example .env
+#    Edita .env y pon: GOOGLE_API_KEY=tu_clave_aqui
+#    El código carga el .env automáticamente con python-dotenv.
 
 # 3a. Interfaz web
 streamlit run app.py
@@ -62,6 +66,8 @@ streamlit run app.py
 # 3b. O modo consola
 python src/agente.py
 ```
+> Si prefieres no usar `.env`, también puedes exportar la variable en tu terminal:
+> `export GOOGLE_API_KEY="tu_clave_aqui"` (en Windows: `set GOOGLE_API_KEY=tu_clave_aqui`).
 
 Para el deploy en la nube, sigue la guía completa en [`docs/deploy_oci.md`](docs/deploy_oci.md).
 
@@ -92,12 +98,15 @@ está fuera del documento fuente y deriva al canal de soporte.*
 ```
 bimbam-agente/
 ├── app.py                 # Interfaz web (Streamlit)
+├── listar_modelos.py      # Utilidad para ver los modelos disponibles en tu API key
 ├── src/
+│   ├── __init__.py
 │   └── agente.py          # Lógica RAG: carga, indexación y cadena de respuesta
 ├── data/
 │   └── politica_reembolsos_bimbam_buy.pdf   # Documento fuente
 ├── docs/
-│   └── deploy_oci.md      # Guía de deploy en OCI paso a paso
+│   ├── deploy_oci.md      # Guía de deploy en OCI paso a paso
+│   └── capturas/          # Capturas del agente y del deploy
 ├── requirements.txt
 ├── .env.example
 └── README.md
@@ -105,4 +114,8 @@ bimbam-agente/
 
 ## Evidencia del deploy en OCI
 
-*(Agregar aquí, tras el deploy: el enlace público `http://IP:8501` y una captura de pantalla de la app respondiendo una pregunta.)*
+La aplicación está desplegada y funcionando en una instancia OCI Compute (Always Free), accesible públicamente.
+
+**Enlace público:** `http://159.112.132.0:8501`
+
+![Deploy en OCI](docs/capturas/captura_deploy_oci.png)
